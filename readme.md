@@ -1,4 +1,4 @@
 # 👨‍🚀 Algorithm Practice Log
 
-- [LeetCode](www.leetcode.com)
+- [LeetCode](https://www.leetcode.com)
 - Personal Data Structure Util Collection
