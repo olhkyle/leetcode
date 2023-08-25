@@ -6,6 +6,32 @@ class Node {
 	}
 }
 
+class Queue {
+	#elements = [];
+
+	constructor(elements = []) {
+		if (!Array.isArray(elements)) throw new TypeError(`${elements} is not an Array`);
+		this.#elements = [...elements];
+	}
+
+	get size() {
+		return this.#elements.length;
+	}
+
+	isEmpty() {
+		return this.size === 0;
+	}
+
+	enqueue(element) {
+		if (arguments.length !== 0) this.#elements.push(element);
+		return this;
+	}
+
+	dequeue() {
+		return this.#elements.shift();
+	}
+}
+
 class BinaryTree {
 	constructor() {
 		this.root = null;
@@ -65,14 +91,37 @@ class BinaryTree {
 	}
 
 	// L - R - N order
-	postTraverseNode(callback) {
+	postOrderTraverseNode(callback) {
 		this.#_postOrderTraverseNode(this.root, callback);
+	}
+
+	// level Order
+	levelOrderTraverseNode(callback) {
+		let q = new Queue();
+		let node = null;
+
+		q.enqueue(this.root);
+
+		while (!q.isEmpty()) {
+			node = q.dequeue();
+			callback(node);
+
+			if (node.left !== null) {
+				q.enqueue(node.left);
+			}
+
+			if (node.right !== null) {
+				q.enqueue(node.right);
+			}
+		}
 	}
 }
 
 let bt = new BinaryTree();
 
-const printNode = node => process.stdout.write(`${node.value} -> `);
+const printNode = node => {
+	process.stdout.write(`${node.value} -> `);
+};
 
 bt.insert(2);
 bt.insert(1);
@@ -83,6 +132,14 @@ bt.insert(8);
 bt.insert(7);
 bt.insert(6);
 
+console.log(bt);
+//		2
+//	1		3
+//				5
+// 			4		8
+// 				7
+// 			6
+
 console.log('#preOrder');
 bt.preOrderTraverse(printNode);
 console.log('end\n');
@@ -92,7 +149,9 @@ bt.inOrderTraverse(printNode);
 console.log('end\n');
 
 console.log('#postOrder');
-bt.postTraverseNode(printNode);
+bt.postOrderTraverseNode(printNode);
 console.log('end\n');
 
-console.log(bt);
+console.log('#levelOrder');
+bt.levelOrderTraverseNode(printNode);
+console.log('end\n');
